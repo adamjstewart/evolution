@@ -12,7 +12,7 @@ import time
 
 
 POP_SIZE = 1000
-END_GOAL = list('Hello World!')
+END_GOAL = list('Hello, World!')
 RATE_OF_INSERTION    = 0.1
 RATE_OF_DELETION     = 0.1
 RATE_OF_SUBSTITUTION = 0.1
@@ -70,7 +70,7 @@ def deletion(sequence):
 
 
 def substitution(sequence):
-    '''Returns: sequence with random characters either capitalized or lowercased.
+    '''Returns: sequence with random characters substituted.
 
     Preconditions: sequence must be a list.'''
 
@@ -78,10 +78,7 @@ def substitution(sequence):
 
     for i in range(len(sequence)):
         if random.random() < RATE_OF_SUBSTITUTION:
-            if sequence[i].isupper():
-                sequence[i] = sequence[i].lower()
-            elif sequence[i].islower():
-                sequence[i] = sequence[i].upper()
+            sequence[i] = random.choice(string.printable)
 
     return sequence
 
@@ -154,15 +151,14 @@ def fitness(source, target):
 if __name__ == '__main__':
 
     # Retrieve input string
-    sequence = []
-    if len(sys.argv) > 1:
-        sequence = list(' '.join(sys.argv[1:]))
+    sequence = list(' '.join(sys.argv[1:]))
 
     # Warning: there is no guarantee that an evolutionary program will converge
     while sequence != END_GOAL:
-        print('Score: {:2d}, String: {}'.format(fitness(sequence, END_GOAL), ''.join(sequence)))
+        score = fitness(sequence, END_GOAL)
+        print('Score: {:2d}, String: {}'.format(score, ''.join(sequence)))
 
-        # Asexual reproduction
+        # Reproduction
         generation = []
         for i in range(POP_SIZE):
             generation.append(sequence[:])
@@ -174,4 +170,5 @@ if __name__ == '__main__':
             if fitness(newSequence, END_GOAL) <= fitness(sequence, END_GOAL):
                 sequence = newSequence
 
-    print('Score: {:2d}, String: {}'.format(fitness(sequence, END_GOAL), ''.join(sequence)))
+    score = fitness(sequence, END_GOAL)
+    print('Score: {:2d}, String: {}'.format(score, ''.join(sequence)))
